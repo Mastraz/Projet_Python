@@ -13,3 +13,9 @@ Installez toutes les bibliothèques nécessaires avec une seule commande :
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+## Choix du modèle d'un modèle NLP (Natural Language Processing)
+
+Nous avons étudié plusieurs modèles avant de faire notre choix :
+- ELMo et Word2Vec : ces modèles transforment un mot en un vecteur unique. Par exemple, le mot "vol" est un vecteur unique mais a 2 sens (voler dans les airs et voler
+
+## Choix du modèle de BERT
