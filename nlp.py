@@ -3,24 +3,17 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 
 #Chargement du dataset
-df = pd.read_csv('tmdb_5000_movies.csv')
-
-# Sélection des colonnes pertinentes
-df = df[['id', 'title', 'overview']]
-
-# Suppression des lignes avec des valeurs manquantes dans la colonne 'overview'
-df = df.dropna(subset=['overview'])
-
-# Affichage des premières lignes du DataFrame
-print(df.head())
-
-# Initialisation du modèle de transformation de phrases
+df = pd.read_csv('movies_cleaned.csv')
+print(df.shape)
+#Chargement du modèle de deep learning miniature (basé sur BERT)
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Encodage des synopsis des films
+#Etape de vectorisation des synopsis
+#chaque synopsis est converti en un vecteur de 384 dimensions
 embeddings = model.encode(df['overview'].tolist(), show_progress_bar=True)
+print(embeddings.shape)
 
-# Sauvegarde des embeddings dans un fichier .npy
+# Sauvegarde des embeddings dans un fichier .npy (fichier binaire NumPy) qui pourra être réutilisé ultérieurement
 np.save('synopsis_embeddings.npy', embeddings)
 
 # Affichage d'un aperçu des embeddings générés
