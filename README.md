@@ -10,7 +10,7 @@ C'est la méthode la plus sûre pour gérer les versions de Python et les biblio
 ```Bash
 # 1. Cloner le projet
 git clone https://github.com/Mastraz/Moveetic.git
-cd Projet_Python
+cd Moveetic
 
 # 2. Créer l'environnement à partir du fichier yml
 conda env create -f environment.yml
