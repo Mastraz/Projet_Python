@@ -25,7 +25,7 @@ Si vous n'utilisez pas Conda, assurez-vous d'avoir Python 3.12 installé.
 ```Bash
 # 1. Cloner le projet
 git clone https://github.com/Mastraz/Moveetic.git
-cd Projet_Python
+cd Moveetic
 
 # 2. Installer les dépendances
 pip install --upgrade pip
