@@ -1,5 +1,6 @@
 # 🎬💙 Moveetic ! Movies Recommandation 
 *Master 1, ISEN, January to February 2026, Teacher: Cyril Barrelet*
+
 Analyzing movie synopses based on user input,
 Using : NLP (BERT), Cosine Similarity and an API interface (FastAPI).
 
@@ -12,6 +13,12 @@ Mooveetic is an intelligent movie recommendation engine that uses Natural Langua
 - Vectorization : transformation of movie synopses into dimensional vectors (Embeddings) using the BERT model.
 -  Recommendation : High-speed similarity calculation using Cosine Similarity to find the closest matches in the database.
 -  API: A clean and documented FastAPI interface allowing real-time movie analysis and recommendation display.
+
+
+### General System Schema:
+
+ <img width="776" height="236" alt="Capture d’écran 2026-02-04 091744" src="https://github.com/user-attachments/assets/8419e908-0e69-4933-a08a-ee3f05b51421" />
+
 
 
 ## 💽 2) Setup Tutorial
