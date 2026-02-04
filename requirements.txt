@@ -1,13 +1,14 @@
+""" tri par type d'utilsation et ordre alphabetique """
 # --- Web API ---
 fastapi==0.109.0
-uvicorn[standard]==0.27.0
 pydantic==2.5.3
-watchfiles  # Nécessaire pour le mode --reload
+uvicorn[standard]==0.27.0
+watchfiles  # Nécessaire pour le mode --reload, cad refresh en direct
 
 # --- Data Handling ---
-pandas==2.2.0
 numpy==1.26.3
-pyarrow     #gestion efficace du CSV
+pandas==2.2.0
+pyarrow     # gestion efficace du CSV
 
 # --- NLP & Embeddings ---
 sentence-transformers==3.3.1
