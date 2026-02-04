@@ -1,6 +1,9 @@
-import pandas as pd
+# movie_cleaner.py
+
 import ast
 import os
+
+import pandas as pd
 
 # ==========================================
 # VERSION FINALE : CLASS (POO)
@@ -8,29 +11,30 @@ import os
 
 class MovieCleaner:
     """
-    Classe responsable du chargement, nettoyage et sauvegarde du dataset de films.
-    Elle gère les valeurs manquantes et le parsing des JSON.
+    Classe responsable du chargement, du nettoyage et de la sauvegarde du dataset de films.
+    Elle gère les valeurs manquantes et transforme les chaînes JSON en texte lisible.
     """
 
-    def __init__(self, input_file="tmdb_5000_movies.csv", output_file="movies_cleaned.csv"):
-        """Initialisation des chemins de fichiers."""
+    def __init__(self, input_file="tmdb_5000_movies.csv", 
+                 output_file="movies_cleaned.csv"):
+        """Initialisation des chemins de fichiers et du DataFrame."""
         self.input_file = input_file
         self.output_file = output_file
-        self.df = None  # Le dataframe sera chargé plus tard
+        self.df = None # execute plus tard
 
-    def load_data(self):
-        """Charge le fichier CSV en mémoire."""
+    def load_data(self) -> bool:
+        """Charge le fichier CSV dans un DataFrame pandas."""
         if not os.path.exists(self.input_file):
             print(f"[ERREUR] Le fichier '{self.input_file}' est introuvable.")
             return False
         
         self.df = pd.read_csv(self.input_file)
-        print(f"[INFO] Données chargées : {self.df.shape[0]} films, {self.df.shape[1]} colonnes.")
+        print(f"[INFO] Données chargées : {self.df.shape[0]} films.")
         return True
 
-    def _parse_json_genres(self, text):
+    def _parse_json_genres(self, text: str) -> list:
         """
-        Méthode interne pour transformer le JSON en liste.
+        Méthode interne pour transformer une chaîne JSON en liste de noms de genres.
         Ex: '[{"name": "Action"}]' -> ['Action']
         """
         try:
@@ -42,56 +46,54 @@ class MovieCleaner:
             return []
 
     def clean_data(self):
-        """Exécute toute la logique de nettoyage."""
+        """Exécute la logique de nettoyage : filtrage, suppression des NaN et parsing."""
         if self.df is None:
-            print("[ATTENTION] Aucune donnée chargée.")
+            print("[ATTENTION] Aucune donnée chargée pour le nettoyage.")
             return
 
-        print("\n--- Début du Nettoyage ---")
+        print("\n--- Démarrage du nettoyage des données ---")
         initial_count = len(self.df)
 
-        # 1. Sélection des colonnes
-        cols_to_keep = ['id', 'title', 'overview', 'genres', 'vote_average', 'release_date']
+        # 1. Sélection des colonnes pertinentes
+        cols_to_keep = [
+            'id', 'title', 'overview', 'genres', 
+            'vote_average', 'release_date'
+        ]
         self.df = self.df[cols_to_keep].copy()
 
-        # 2. Suppression des NaN (Vide)
+        # 2. Suppression des valeurs manquantes (Lignes vides)
         self.df = self.df.dropna(subset=['overview', 'release_date'])
-        print(f"[INFO] Lignes supprimées (données manquantes) : {initial_count - len(self.df)}")
+        dropped_count = initial_count - len(self.df)
+        print(f"[INFO] Lignes supprimées (données manquantes) : {dropped_count}")
 
-        # 3. Parsing des genres
-        print("[INFO] Transformation des genres (JSON -> Texte)...")
-        # On applique la méthode _parse_json_genres sur chaque ligne
-        self.df['genres_list'] = self.df['genres'].apply(self._parse_json_genres)
-        # On convertit en string pour le CSV final
-        self.df['genres'] = self.df['genres_list'].apply(lambda x: ", ".join(x))
+        # 3. Parsing des genres (JSON -> Texte)
+        print("[INFO] Transformation des genres...")
+        # On extrait les noms dans une liste temporaire
+        genres_list = self.df['genres'].apply(self._parse_json_genres)
+        # On convertit la liste en une chaîne de caractères (ex: "Action, Drama")
+        self.df['genres'] = genres_list.apply(lambda x: ", ".join(x))
         
-        # Nettoyage des colonnes temporaires
-        self.df = self.df.drop(columns=['genres_list'])
-
-        print("[SUCCES] Nettoyage terminé.")
+        print("[SUCCÈS] Nettoyage terminé.")
 
     def save_data(self):
-        """Sauvegarde le résultat final."""
+        """Sauvegarde le DataFrame traité dans un fichier CSV."""
         if self.df is not None:
             self.df.to_csv(self.output_file, index=False)
-            print(f"\n[SUCCES] Fichier sauvegardé : {self.output_file}")
-            print(f"[INFO] Colonnes finales : {self.df.columns.tolist()}")
+            print(f"\n[SUCCÈS] Fichier sauvegardé sous : {self.output_file}")
 
     def run_pipeline(self):
         """
-        Méthode 'Façade' : Lance tout le processus d'un coup.
-        C'est cette méthode que les autres scripts appelleront.
+        Méthode 'Façade' qui orchestre tout le processus (chargement, nettoyage, sauvegarde).
         """
-        print(f"[INFO] Démarrage du pipeline de nettoyage...")
+        print("[INFO] Démarrage du pipeline MovieCleaner...")
         if self.load_data():
             self.clean_data()
             self.save_data()
 
-# --- Zone d'exécution (Ce qui se passe quand on lance le fichier directement) ---
+
 if __name__ == "__main__":
-    # On instancie la classe
+    # Instanciation de la classe et lancement du traitement
     cleaner = MovieCleaner()
-    # On lance le traitement
     cleaner.run_pipeline()
 
 

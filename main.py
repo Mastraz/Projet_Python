@@ -1,46 +1,72 @@
-from fastapi import FastAPI
-import pandas as pd
-from MovieCleaner import MovieCleaner
-from MovieEncoder import MovieEncoder
-from MovieSearcher import MovieSearcher
 import os
 
-# --- INITIALISATION ---
-app = FastAPI(title="API Cinéma - Version Simple")
-# Attention : cleaner() charge et nettoie tout le dataset à chaque lancement du serveur
+import pandas as pd
+import uvicorn
+from fastapi import FastAPI
+
+from movie_cleaner import MovieCleaner
+from movie_encoder import MovieEncoder
+from movie_searcher import MovieSearcher
+
+
+# --- INITIALISATION DE L'API ---
+app = FastAPI(
+    title="Mooveetic API",
+    description="Moteur de recommandation basé sur la similarité sémantique."
+)
+
+# Instanciation des composants de traitement
 cleaner = MovieCleaner()
 encoder = MovieEncoder()
-searcher = MovieSearcher()
 
-# --- ETAPE 1 : Vectorisation de la base globale (au démarrage) ---
-# On le fait une fois pour avoir le fichier .npy global
+# --- PRÉPARATION DES DONNÉES (PIPELINE) ---
+
+# Étape 1 : Nettoyage du dataset si le fichier propre n'existe pas
+if not os.path.exists('movies_cleaned.csv'):
+    cleaner.run_pipeline()
+
+# Étape 2 : Vectorisation de la base si les embeddings sont manquants
 if not os.path.exists('synopsis_embeddings.npy'):
-    print("[INIT] Première vectorisation de la base de données...")
+    print("[INIT] Première vectorisation de la base de données globale...")
     encoder.vectorize_csv('movies_cleaned.csv', output_npy='synopsis_embeddings.npy')
 
-# --- LA ROUTE EN GET ---
+# Étape 3 : Chargement du moteur de recherche 
+# (Obligatoirement après les étapes 1 et 2)
+searcher = MovieSearcher()
+
+
+# --- ROUTES DE L'API ---
 
 @app.get("/analyze")
 def analyze_movie(title: str, synopsis: str):
-    # 1. On crée le fichier temporaire (indispensable pour votre structure actuelle)
-    temp_filename = "temp_input.csv"
-    pd.DataFrame({"title": [title], "overview": [synopsis]}).to_csv(temp_filename, index=False)
+    """
+    Endpoint pour analyser un nouveau film et trouver des recommandations.
+    Prend un titre et un synopsis en paramètres.
+    """
+    # 1. Création du fichier temporaire pour la vectorisation
+    temp_file = "temp_input.csv"
+    user_data = {"title": [title], "overview": [synopsis]}
+    pd.DataFrame(user_data).to_csv(temp_file, index=False)
     
-    # 2. On transforme ce texte en vecteur (le pôle NLP entre en action)
-    # C'est ici que l'on appelle votre classe MovieEncoder
-    query_embedding = encoder.vectorize_csv(temp_filename)
+    # 2. Transformation du texte en vecteur via le pôle NLP
+    query_vector = encoder.vectorize_csv(temp_file)
     
-    # 3. Recherche des films similaires dans la base
-    recommendations = searcher.find_similar_movies(query_embedding, top_n=3)
+    # 3. Recherche des films similaires via le pôle Algorithmique
+    recommendations = searcher.find_similar_movies(query_vector, top_n=3)
     
-    # 4. Réponse finale
+    # 4. Nettoyage du fichier temporaire (Optionnel)
+    if os.path.exists(temp_file):
+        os.remove(temp_file)
+    
+    # 5. Réponse structurée
     return {
         "status": "Success",
         "movie_analyzed": title,
         "recommendations": recommendations
     }
 
-# --- LANCEMENT SECURITAIRE ---
+
+# --- LANCEMENT DU SERVEUR ---
 if __name__ == "__main__":
-    import uvicorn
+    # Démarrage avec rechargement automatique pour le développement
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
