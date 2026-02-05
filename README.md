@@ -67,9 +67,9 @@ The easiest way is to use the built-in Swagger interface :
 
 Open your browser on : http://127.0.0.1:8000/docs.
 
-Click on "Try it out".
-
 Unfold the GET/analyze route.
+
+Click on "Try it out".
 
 Enter a title and a text (ex: a heist movie in space with dogs).
 
