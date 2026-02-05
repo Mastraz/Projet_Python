@@ -306,6 +306,32 @@ Result : The server returns a JSON object in raw form, structured to be easily r
 
 
 
+## E) Kmeans and T-SNE model :
+
+To structure our data, we used synopses vectors (embeddings)
+
+1. Optimal number of clusters
+Several K-Means models with different numbers of clusters were used. The evaluation by the silhouette score designated K=2 as the optimal configuration. However, the score obtained is 0.025, which indicates a very low separation between the groups.
+
+2. Score meaning
+A score of 0.025 suggests that the clusters overlap. 
+Some reasons may explain this:
+Semantic Complexity: Movie synopses often deal with overlapping themes (love, death, adventure), making the boundaries blurry.
+“The curse of dimensionality” : Working in a 384-dimensional space makes K-Means clustering less effective (Euclidean distances).
+Data Density: BERT all movies are semantically close which prevents the formation of isolated spots.
+
+3. Dimensionality reduction and visualization
+To see the results, we used t-SNE. It can project our 384 dimension vectors into a 2D space. This visualization shows the two clusters and the overlap between them.
+Visualization:
+
+<img width="410" height="311" alt="4" src="https://github.com/user-attachments/assets/e09db133-0e85-4ccc-9a49-dc89f3fc2b90" />
+
+
+This graphic shows how the synopses are correlated, and the two colors are mixed in the center. The low silhouette score of 0.025 confirms that the two algorithmically identified groups are poorly separated. Indeed, a movie has different topics :  Action-Drama, Horror-Comedy; the boundaries are blurred. Movies are a continuous set rather than completely isolated categories.
+
+
+
+
 
 
 
