@@ -67,13 +67,15 @@ The easiest way is to use the built-in Swagger interface :
 
 Open your browser on : http://127.0.0.1:8000/docs.
 
+Click on "Try it out".
+
 Unfold the GET/analyze route.
 
 Enter a title and a text (ex: a heist movie in space with dogs).
 
 Click on Execute to see the 3 best recommendations from the TMDB database.
 
-Click on "Try it out".
+
 
 
 
