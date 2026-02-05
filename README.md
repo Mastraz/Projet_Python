@@ -252,5 +252,60 @@ for film in top:
 
 ```
 
+## D) Interface API (FastAPI)
+
+The API is Moveetic's communication interface. It acts as a conductor, connecting data cleaning, BERT encoding, and the search engine to provide real-time recommendations through HTTP requests.
+
+### Main functionalities : 
+- Automation conductor : First, the API checks the existence of the necessary files (cleaned .csv and vectorized .npy). If any files are missing, it automatically starts the cleaning and vectorization pipelines.
+- Interactive documentation : Thanks to Swagger UI, the API creates a self-generated documentation. 
+- Real-time processing : receives a title and a synopsis and transforms them in a vector. Then, it asks the dataset to return the Top 3 recommendation in JSON format.
+- Architecture : uses Pydantic for input data validation and Uvicorn as a high-performance ASGI server.
+The API uses MovieCleaner,  MovieEncoder and MovieSearcher; following the single responsibility principle in object-oriented programming (OOP).
+
+
+### Run test
+The API is designed to be easy to use. Here’s how to start the server and make a request.
+
+1. Launching serveur
+‘’’ bash
+
+In the terminal
+python main.py
+‘’’
+2. Make a request
+Option A : Interactive user interface (Swagger UI)
+This method is perfect to visualize and to compute and to run the program.
+Action : Launch the server http://127.0.0.1:8000/docs.
+How to use : Click on "Try it out", fill in title and synopsis, then click on "Execute".
+Benefits : No command-line usage is needed, and documentation is accessible in real time.
+
+<img width="533" height="350" alt="1" src="https://github.com/user-attachments/assets/9e66523e-94db-45ea-9012-39cca2d91b42" />
+
+
+## Example to Copy/past 
+Title: Thor: The Dark World ; 
+Synopsis : Thor fights to restore order across the cosmos… but an ancient race led by the vengeful Malekith returns to plunge the universe back into darkness. Faced with an enemy that even Odin and Asgard cannot withstand, Thor must embark on his most perilous and personal journey yet, one that will reunite him with Jane Foster and force him to sacrifice everything to save us all.
+
+Result: 
+
+<img width="750" height="207" alt="2" src="https://github.com/user-attachments/assets/a68216a1-abdb-47b5-b52b-70b7e93bcddd" />
+
+
+Option B : URL calling (HTTP request)
+Allows Moveetic’s integration into any application (website/ mobile app).
+Request : 
+‘’’Bash
+# Example, terminal tool
+http://127.0.0.1:8000/analyze?title=Inception&synopsis=A+thief+who+enters+the+dreams+of+others.
+‘’’
+
+Result : The server returns a JSON object in raw form, structured to be easily read by another program.
+
+<img width="756" height="64" alt="3" src="https://github.com/user-attachments/assets/3057670f-c82a-4897-bfe8-a3b331af89ea" />
+
+
+
+
 
 
