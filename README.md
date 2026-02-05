@@ -205,8 +205,7 @@ Since the movie array and the vector array have the same length, we can retrieve
 ```Bash
 titre = df.iloc[i]["title"]  #iloc => lines searching (pandas)
 ```
-
-***Top 3 movie selection :The list of movies with their similarity scores is filtered in descending order, allowing us to obtain the “Top Movie Recommendations” table.
+- Top 3 movie selection :The list of movies with their similarity scores is filtered in descending order, allowing us to obtain the “Top Movie Recommendations” table.
 
 ```Bash
 best_similarite_films.sort(key=lambda x:x[2], reverse=True) #tri ordre décroissant "2" place du score
