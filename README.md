@@ -119,3 +119,72 @@ cleaner = MovieCleaner()
 cleaner.run_pipeline()
 ```
 Result : 'movies_cleaned.csv'
+
+
+
+
+## B) Vectorisation
+
+### Models study : NLP (Natural Language Processing)
+We studied different models before making a choice : 
+- ELMo and Word2Vec : transform a word into a unique vector, but it might be confusing depending on the word (e.g : a bat -> the nocturnal animal or the baseball paddle)
+- Text-to-Transform (T5) : can only traduce text input, it does not make sense for the purpose.
+- Generative Pre-trained Transformer (GPT) : useful to understand and to categorize text input, but also to write text by watching the left word to predict the next one. 
+- BERT : an encoder that analyzes text to perform recommendations or sentiment analysis.
+
+This is why BERT is the best model for the project. Indeed, it captures the nuances of natural language, and uses bidirectional meaning. 
+
+### Models choice : BERT
+They are different BERT models : 
+- To maximize precision : all-mpnet-base-v2: a little slow but efficient
+multi-qa-mpnet-base-dot-v1:  optimized to answer user questions and to find documentation.
+- For French dataset : 
+paraphrase-mutlilingue-MiniLM-L12-v2 and distiluse-base-multilingual-cased-v1
+- For speed (like API) : 
+paraphrase-albert-small-v2 and all-MiniLM-L12-v2, where ALBERT is model has fewer parameters (6 instead of 12), which makes it less robust.
+
+For the project we choose all-MiniLM-L12-v2 which is fast and useful for our English database. 
+
+### Main functionalities:
+Deep Learning model initialization thanks to SentenceTransformer
+Synopsis vectorization :
+Reading the CSV file and loading the synopses
+Encoding the synopses
+Saving the vectorized synopses to a new .npy file
+
+
+### Run test
+To test if the NLP model is correctly loaded and see how BERT "sees" a movie synopsis, you can run the following test script. It demonstrates the transformation of raw text into a 384-dimensional vector.
+
+1. Create a file named test_encoding.py:
+```Bash
+from MovieEncoder import MovieEncoder
+import numpy as np
+
+
+# 1. Initialize the encoder (loads the BERT model)
+encoder = MovieEncoder()
+
+
+# 2. Define a test synopsis
+synopsis = "A space pirate fighting aliens in a galaxy far away."
+
+
+# 3. Generate the embedding using the model inside our class
+print(f"Vectorizing: '{synopsis}'...")
+vector = encoder.model.encode([synopsis])
+
+
+# 4. Display the results
+print(f"✅ Success! Vector shape: {vector.shape}")
+print(f"First 5 numerical values of the vector: \n{vector[0][:5]}")
+
+```
+
+2. Expected Output in your terminal:
+[INFO] Chargement du modèle all-MiniLM-L6-v2...
+Vectorizing: 'A space pirate fighting aliens in a galaxy far away.'...
+✅ Success! Vector shape: (1, 384)
+First 5 numerical values of the vector: 
+[-0.04049212  0.13097127 -0.04528323 -0.02100811 -0.06861791]
+
