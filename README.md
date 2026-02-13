@@ -273,11 +273,10 @@ The API uses MovieCleaner,  MovieEncoder and MovieSearcher; following the single
 The API is designed to be easy to use. Here’s how to start the server and make a request.
 
 1. Launching serveur
-‘’’ bash
-
-In the terminal
+``` bash
+#In the terminal
 python main.py
-‘’’
+```
 2. Make a request
 Option A : Interactive user interface (Swagger UI)
 This method is perfect to visualize and to compute and to run the program.
@@ -300,10 +299,9 @@ Result:
 Option B : URL calling (HTTP request)
 Allows Moveetic’s integration into any application (website/ mobile app).
 Request : 
-‘’’Bash
-### Example, terminal tool
+```Bash
 http://127.0.0.1:8000/analyze?title=Inception&synopsis=A+thief+who+enters+the+dreams+of+others.
-‘’’
+```
 
 Result : The server returns a JSON object in raw form, structured to be easily read by another program.
 
