@@ -341,6 +341,21 @@ This graphic shows how the synopses are correlated, and the two colors are mixed
 
 
 
+## 4) 🎥 Relevant visualization
+### Execution time
+=> Vectorisation: 
 
+<img width="428" height="37" alt="Capture d&#39;écran 2026-02-04 084259" src="https://github.com/user-attachments/assets/ad7c0389-2bfc-4be1-8b91-848a369c354d" />
+
+TOTAL corresponds to the vectorisation (encoding) time of the line entered by the user and the database. 
+	
+=> API: 
+
+<img width="247" height="31" alt="Capture d&#39;écran 2026-02-04 083525" src="https://github.com/user-attachments/assets/2208eefb-afaa-489a-b128-45fe9df3d836" />
+
+This time corresponds to the research time to find the recommendations based on what the user entered in the GET request.
+
+### Analyze of the timing:
+The encoding time that you see is very short compared to the first one you can have. The first time is longer as it needs to be fully calculated but the next time it takes a shorter amount of time as we already have the model saved in the file synopsis_embeddings.npy and the program only recharges the data.
 
 
