@@ -39,7 +39,7 @@ To ensure the project runs smoothly, please follow the steps below.
 
 ```Bash
 # 1. Clone the project
-git clone https://github.com/Mastraz/Moveetic.git
+git clone https://github.com/nolannedelec/Moveetic.git
 cd Moveetic
 
 # 2. Create the environment from the yml file
@@ -54,7 +54,7 @@ Not using Conda ? Make sure you have Python 3.12 installed.
 
 ```Bash
 # 1. Clone the project
-git clone https://github.com/Mastraz/Moveetic.git
+git clone https://github.com/nolannedelec/Moveetic.git
 cd Moveetic
 
 # 2. Download dependencies
